@@ -6,6 +6,7 @@ from openerp.tests.common import TransactionCase
 from openerp import fields
 import datetime
 
+
 class TestSaleMultiPickingByRequestedDate(TransactionCase):
     """Check the _get_shipped method of Sale Order. """
 
@@ -18,29 +19,29 @@ class TestSaleMultiPickingByRequestedDate(TransactionCase):
         SOL = self.env['sale.order.line']
         Product = self.env['product.product']
         Warehouse = self.env['stock.warehouse']
-        self.wh1 = Warehouse.create({'name':'wh1','code':'wh1'})
-        self.wh2 = Warehouse.create({'name':'wh2','code':'wh2'})
-        p1 = Product.create({'name':'p1', 'type':'product'}).id
+        self.wh1 = Warehouse.create({'name': 'wh1', 'code': 'wh1'})
+        self.wh2 = Warehouse.create({'name': 'wh2', 'code': 'wh2'})
+        p1 = Product.create({'name': 'p1', 'type': 'product'}).id
         today = datetime.datetime.now()
         self.dt1 = today
         self.dt2 = today + datetime.timedelta(days=1)
         self.sale1 = SO.create({'partner_id': 1})
-        self.sale_line1 = SOL.create({'product_id':p1,
+        self.sale_line1 = SOL.create({'product_id': p1,
                                       'name': 'cool product',
                                       'order_id': self.sale1.id,
                                       'warehouse_id': self.wh1.id,
                                       'requested_date': self.dt1})
-        self.sale_line2 = SOL.create({'product_id':p1,
+        self.sale_line2 = SOL.create({'product_id': p1,
                                       'name': 'cool product',
                                       'order_id': self.sale1.id,
                                       'warehouse_id': self.wh1.id,
                                       'requested_date': self.dt2})
-        self.sale_line3 = SOL.create({'product_id':p1,
+        self.sale_line3 = SOL.create({'product_id': p1,
                                       'name': 'cool product',
                                       'order_id': self.sale1.id,
                                       'warehouse_id': self.wh2.id,
                                       'requested_date': self.dt1})
-        self.sale_line4 = SOL.create({'product_id':p1,
+        self.sale_line4 = SOL.create({'product_id': p1,
                                       'name': 'cool product',
                                       'order_id': self.sale1.id,
                                       'warehouse_id': self.wh2.id,
@@ -76,12 +77,12 @@ class TestSaleMultiPickingByRequestedDate(TransactionCase):
         self.sale1.action_button_confirm()
         req_date = fields.Date.to_string(self.dt1)
         g_name = self.sale1.name + '/' + self.wh1.name + '/' + req_date
-        groups = self.env['procurement.group'].search([('name','=',g_name)])
+        groups = self.env['procurement.group'].search([('name', '=', g_name)])
 
         for group in groups:
             if group.name == g_name:
                 procurements = self.env['procurement.order'].search([
-                    ('group_id','=', group.id)])
+                    ('group_id', '=', group.id)])
                 self.assertEqual(len(procurements), 1)
                 self.assertEqual(len(group), 1)
                 ok = True

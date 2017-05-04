@@ -1,8 +1,9 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
    :alt: License: AGPL-3
 
+========================================
 Sale Procurement Group by Requested date
-==============================
+========================================
 
 This module creates different procurements groups for different requested
 dates in a sale order line when the sale order is confirmed.

@@ -3,8 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api
-from datetime import datetime
-from openerp.exceptions import Warning
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -28,8 +27,9 @@ class SaleOrder(models.Model):
         if line._get_procurement_group_key()[0] == 9:
             if line.requested_date:
                 vals['name'] = '/'.join([vals['name'], line.warehouse_id.name,
-                                          req_date])
+                                         req_date])
         return vals
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -47,6 +47,5 @@ class SaleOrderLine(models.Model):
             return key
         req_datetime = fields.Datetime.from_string(self.requested_date)
         req_date = fields.Date.to_string(req_datetime)
-        key = '/'.join([str(self.warehouse_id.id),
-                  req_date])
+        key = '/'.join([str(self.warehouse_id.id), req_date])
         return (priority, key)
